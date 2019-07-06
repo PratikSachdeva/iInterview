@@ -2,7 +2,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
+	<!-- <groupId>com.example.speech</groupId> <artifactId>speech-google-cloud-samples</artifactId> 
+		<packaging>jar</packaging> -->
 	<groupId>iInterview</groupId>
 	<artifactId>iInterview2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -10,8 +12,18 @@
 
 	<name>iInterview2</name>
 	<url>http://maven.apache.org</url>
+	<!-- The parent pom defines common style checks and testing strategies for 
+		our samples. Removing or replacing it should not affect the execution of 
+		the samples in anyway. -->
+	<parent>
+		<groupId>com.google.cloud.samples</groupId>
+		<artifactId>shared-configuration</artifactId>
+		<version>1.0.11</version>
+	</parent>
 
 	<properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -31,6 +43,133 @@
 			<groupId>net.sourceforge.argparse4j</groupId>
 			<artifactId>argparse4j</artifactId>
 			<version>0.8.1</version>
+		</dependency>	
+		<!-- [START speech_quickstart_dependencies] -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-speech</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<!-- [END speech_quickstart_dependencies] -->
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13-beta-3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.truth</groupId>
+			<artifactId>truth</artifactId>
+			<version>0.45</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>iInterview.iInterview2.SpeechToText</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>Quickstart</id>
+			<activation>
+				<property>
+					<name>Quickstart</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>iInterview.iInterview2.SpeechToText</mainClass>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>Recognize</id>
+			<activation>
+				<property>
+					<name>Recognize</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>com.example.speech.Recognize</mainClass>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>InfiniteStreamRecognize</id>
+			<activation>
+				<property>
+					<name>InfiniteStreamRecognize</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>com.example.speech.InfiniteStreamRecognize</mainClass>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
